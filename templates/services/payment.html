@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+
+{% block title %}Payment - Haridwar Puja{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+        <!-- Header -->
+        <div class="orange-gradient text-white p-8">
+            <h1 class="text-3xl font-bold mb-2">Complete Your Payment</h1>
+            <p class="opacity-90">Secure payment powered by Razorpay</p>
+        </div>
+
+        <!-- Content -->
+        <div class="p-8">
+            <!-- Order Summary -->
+            <div class="mb-8 pb-8 border-b">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Order Summary</h2>
+
+                <div class="bg-gray-50 p-6 rounded-lg mb-6">
+                    <div class="mb-4">
+                        <h3 class="font-bold text-lg text-gray-800">{{ booking.service.name }}</h3>
+                        <p class="text-gray-600">Booking ID: #{{ booking.id }}</p>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Service Price</span>
+                            <span class="font-semibold">₹{{ booking.total_amount }}</span>
+                        </div>
+                        <div class="flex justify-between text-sm text-gray-600">
+                            <span>Customer</span>
+                            <span>{{ booking.customer_name }}</span>
+                        </div>
+                        <div class="flex justify-between text-sm text-gray-600">
+                            <span>Preferred Date</span>
+                            <span>{{ booking.preferred_date|date:"d M, Y" }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Amount to Pay -->
+                <div class="bg-orange-50 p-6 rounded-lg border-2 border-orange-200">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xl font-bold text-gray-800">Total Amount to Pay</span>
+                        <span class="text-3xl font-bold text-orange-600">₹{{ booking.total_amount }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Details -->
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Payment Information</h2>
+
+                <div class="bg-blue-50 p-4 rounded-lg mb-4 text-sm text-blue-800">
+                    <p class="mb-2">🔒 Your payment is secure and encrypted</p>
+                    <p>✅ Payments accepted: Credit Card, Debit Card, UPI, Netbanking, Wallet</p>
+                </div>
+
+                <!-- Razorpay Checkout Button -->
+                <button id="rzp-button1" class="w-full orange-gradient text-white py-4 rounded-lg font-bold hover:opacity-90 transition">
+                    Pay with Razorpay
+                </button>
+            </div>
+
+            <!-- Customer Details -->
+            <div class="border-t pt-8">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">Customer Details</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <p class="text-gray-600 text-sm">Name</p>
+                        <p class="font-semibold text-gray-800">{{ booking.customer_name }}</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-600 text-sm">Email</p>
+                        <p class="font-semibold text-gray-800">{{ booking.customer_email }}</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-600 text-sm">Phone</p>
+                        <p class="font-semibold text-gray-800">{{ booking.customer_phone }}</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-600 text-sm">Address</p>
+                        <p class="font-semibold text-gray-800">{{ booking.customer_address|truncatewords:5 }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Info -->
+        <div class="bg-gray-50 p-8 border-t">
+            <p class="text-gray-600 text-sm text-center">
+                By proceeding, you agree to our terms and conditions. Your booking will be confirmed once payment is received.
+            </p>
+        </div>
+    </div>
+
+    <!-- Safety Info -->
+    <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="text-center">
+            <div class="text-4xl mb-2">🔒</div>
+            <h3 class="font-bold text-gray-800 mb-1">Secure Payment</h3>
+            <p class="text-gray-600 text-sm">256-bit SSL encrypted</p>
+        </div>
+        <div class="text-center">
+            <div class="text-4xl mb-2">✅</div>
+            <h3 class="font-bold text-gray-800 mb-1">Verified</h3>
+            <p class="text-gray-600 text-sm">RBI approved payment gateway</p>
+        </div>
+        <div class="text-center">
+            <div class="text-4xl mb-2">⚡</div>
+            <h3 class="font-bold text-gray-800 mb-1">Instant Confirmation</h3>
+            <p class="text-gray-600 text-sm">Get confirmation via email</p>
+        </div>
+    </div>
+</div>
+
+<!-- Razorpay Script -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+document.getElementById('rzp-button1').onclick = function(e) {
+    e.preventDefault();
+
+    var options = {
+        "key": "{{ razorpay_key }}",
+        "amount": {{ amount }},
+        "currency": "INR",
+        "name": "Haridwar Puja",
+        "description": "{{ booking.service.name }} - Booking #{{ booking.id }}",
+        "order_id": "{{ razorpay_order_id }}",
+        "prefill": {
+            "name": "{{ booking.customer_name }}",
+            "email": "{{ booking.customer_email }}",
+            "contact": "{{ booking.customer_phone }}"
+        },
+        "handler": function(response) {
+            // Payment successful, send callback
+            fetch('{% url "services:payment_callback" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({
+                    razorpay_payment_id: response.razorpay_payment_id,
+                    razorpay_order_id: response.razorpay_order_id,
+                    razorpay_signature: response.razorpay_signature
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    window.location.href = '{% url "services:payment_success" booking.id %}';
+                } else {
+                    window.location.href = '{% url "services:payment_failed" booking.id %}';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                window.location.href = '{% url "services:payment_failed" booking.id %}';
+            });
+        },
+        "theme": {
+            "color": "#f97316"
+        }
+    };
+
+    var rzp1 = new Razorpay(options);
+    rzp1.open();
+};
+</script>
+{% endblock %}

@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+
+{% block title %}Payment Failed - Haridwar Puja{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <!-- Failed Card -->
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+        <!-- Header -->
+        <div class="bg-red-500 text-white p-12 text-center">
+            <div class="text-6xl mb-4">❌</div>
+            <h1 class="text-4xl font-bold">Payment Failed</h1>
+            <p class="text-lg mt-2 opacity-90">We couldn't process your payment</p>
+        </div>
+
+        <!-- Content -->
+        <div class="p-8">
+            <!-- Error Message -->
+            <div class="mb-8 pb-8 border-b">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">What Happened?</h2>
+
+                <div class="bg-red-50 p-6 rounded-lg border-2 border-red-200 mb-6">
+                    <p class="text-red-800 mb-2">
+                        <strong>Booking ID:</strong> #{{ booking.id }}
+                    </p>
+                    <p class="text-red-700 text-sm">
+                        Your payment could not be processed. This could be due to insufficient funds, incorrect card details, or a network issue.
+                    </p>
+                </div>
+
+                <!-- Booking Details -->
+                <div class="space-y-4">
+                    <div>
+                        <p class="text-gray-600 text-sm">Service</p>
+                        <p class="font-bold text-gray-800 text-lg">{{ booking.service.name }}</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-gray-600 text-sm mb-1">📅 Preferred Date</p>
+                            <p class="font-bold text-gray-800">{{ booking.preferred_date|date:"d M, Y" }}</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-gray-600 text-sm mb-1">💰 Amount Due</p>
+                            <p class="font-bold text-red-600 text-lg">₹{{ booking.total_amount }}</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-gray-600 text-sm mb-1">Status</p>
+                            <p class="font-bold text-red-600">{{ booking.get_status_display }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Troubleshooting -->
+            <div class="mb-8 pb-8 border-b">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">How to Proceed?</h3>
+
+                <div class="space-y-4">
+                    <div class="flex gap-4">
+                        <div class="flex-shrink-0">
+                            <div class="flex items-center justify-center h-10 w-10 rounded-full bg-orange-100 text-orange-600 font-bold">
+                                1
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-800 mb-1">Try Again with Different Payment Method</h4>
+                            <p class="text-gray-600 text-sm">You can try a different credit/debit card, UPI, or net banking</p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4">
+                        <div class="flex-shrink-0">
+                            <div class="flex items-center justify-center h-10 w-10 rounded-full bg-orange-100 text-orange-600 font-bold">
+                                2
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-800 mb-1">Check Your Card/Account</h4>
+                            <p class="text-gray-600 text-sm">Ensure you have sufficient balance and correct payment details</p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4">
+                        <div class="flex-shrink-0">
+                            <div class="flex items-center justify-center h-10 w-10 rounded-full bg-orange-100 text-orange-600 font-bold">
+                                3
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-800 mb-1">Contact Our Support Team</h4>
+                            <p class="text-gray-600 text-sm">Our team is ready to help you complete the payment</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Common Issues -->
+            <div class="mb-8">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">Common Issues & Solutions</h3>
+
+                <div class="space-y-3">
+                    <details class="p-4 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100">
+                        <summary class="font-bold text-gray-800">Insufficient Funds</summary>
+                        <p class="text-gray-600 mt-2 text-sm">Ensure your card/account has at least ₹{{ booking.total_amount }}. Try with a different card.</p>
+                    </details>
+
+                    <details class="p-4 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100">
+                        <summary class="font-bold text-gray-800">Card Declined by Bank</summary>
+                        <p class="text-gray-600 mt-2 text-sm">Contact your bank to enable international transactions. Try a different card or payment method.</p>
+                    </details>
+
+                    <details class="p-4 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100">
+                        <summary class="font-bold text-gray-800">Network/Connection Error</summary>
+                        <p class="text-gray-600 mt-2 text-sm">Check your internet connection and try again after a few minutes.</p>
+                    </details>
+
+                    <details class="p-4 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100">
+                        <summary class="font-bold text-gray-800">Still Having Issues?</summary>
+                        <p class="text-gray-600 mt-2 text-sm">Contact our support team for immediate assistance.</p>
+                    </details>
+                </div>
+            </div>
+
+            <!-- Contact Support -->
+            {% if site_config %}
+            <div class="border-t pt-8">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">Get Immediate Help</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {% if site_config.phone_number %}
+                    <a href="tel:{{ site_config.phone_number }}"
+                       class="flex items-center gap-3 p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition border-2 border-blue-200">
+                        <span class="text-3xl">📞</span>
+                        <div>
+                            <p class="font-semibold text-gray-800">Call Us</p>
+                            <p class="text-blue-600 font-bold">{{ site_config.phone_number }}</p>
+                            <p class="text-blue-600 text-sm">Available 24/7</p>
+                        </div>
+                    </a>
+                    {% endif %}
+
+                    {% if site_config.whatsapp_number %}
+                    <a href="https://wa.me/{{ site_config.whatsapp_number|cut:'-'|cut:' ' }}" target="_blank"
+                       class="flex items-center gap-3 p-4 bg-green-50 rounded-lg hover:bg-green-100 transition border-2 border-green-200">
+                        <span class="text-3xl">💬</span>
+                        <div>
+                            <p class="font-semibold text-gray-800">WhatsApp</p>
+                            <p class="text-green-600 font-bold">Quick Support</p>
+                            <p class="text-green-600 text-sm">Instant help</p>
+                        </div>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="{% url 'services:payment' booking.id %}"
+           class="orange-gradient text-white px-8 py-3 rounded-lg font-bold hover:opacity-90 transition text-center">
+            Try Payment Again
+        </a>
+        <a href="{% url 'services:service_detail' booking.service.pk %}"
+           class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-8 py-3 rounded-lg font-bold transition text-center">
+            Back to Service
+        </a>
+    </div>
+
+    <!-- Information Box -->
+    <div class="mt-8 p-6 bg-blue-50 rounded-lg border-2 border-blue-200">
+        <h4 class="font-bold text-blue-900 mb-2">ℹ️ Your Booking is Safe</h4>
+        <p class="text-blue-800 text-sm">
+            Your booking (ID: #{{ booking.id }}) is still active. You can retry the payment at any time. No payment has been deducted from your account.
+        </p>
+    </div>
+</div>
+{% endblock %}

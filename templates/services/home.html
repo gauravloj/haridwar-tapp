@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Haridwar Puja{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="orange-gradient text-white rounded-lg py-16 mb-12">
+    <div class="max-w-4xl mx-auto text-center">
+        <h1 class="text-5xl font-bold mb-4">Welcome to Haridwar Puja</h1>
+        <p class="text-xl mb-8 opacity-90">Authentic Vedic rituals and pujas performed by certified pandits on the banks of the Ganges River</p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="{% url 'services:service_list' %}" class="bg-white text-orange-600 px-8 py-3 rounded-lg font-bold hover:bg-gray-100 transition">
+                Explore Services
+            </a>
+            {% if site_config and site_config.whatsapp_number %}
+            <a href="https://wa.me/{{ site_config.whatsapp_number|cut:'-'|cut:' ' }}" target="_blank"
+               class="bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg font-bold hover:bg-white hover:text-orange-600 transition">
+                Contact via WhatsApp
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+    <div class="bg-white p-8 rounded-lg shadow-lg text-center">
+        <div class="text-4xl font-bold text-orange-600 mb-2">{{ total_services }}+</div>
+        <p class="text-gray-600">Services Available</p>
+    </div>
+    <div class="bg-white p-8 rounded-lg shadow-lg text-center">
+        <div class="text-4xl font-bold text-orange-600 mb-2">500+</div>
+        <p class="text-gray-600">Happy Customers</p>
+    </div>
+    <div class="bg-white p-8 rounded-lg shadow-lg text-center">
+        <div class="text-4xl font-bold text-orange-600 mb-2">20+</div>
+        <p class="text-gray-600">Expert Pandits</p>
+    </div>
+</section>
+
+<!-- Featured Services -->
+<section class="mb-16">
+    <h2 class="text-4xl font-bold text-gray-800 mb-8">Featured Services</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for service in featured_services %}
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
+            {% if service.image %}
+            <img src="{{ service.image.url }}" alt="{{ service.name }}" class="w-full h-48 object-cover">
+            {% else %}
+            <div class="w-full h-48 bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center">
+                <span class="text-6xl">🕉️</span>
+            </div>
+            {% endif %}
+
+            <div class="p-6">
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">{{ service.name }}</h3>
+                <p class="text-gray-600 mb-4">{{ service.description|truncatewords:15 }}</p>
+
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-orange-600 font-bold text-2xl">₹{{ service.price }}</span>
+                    <span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm">
+                        {{ service.get_category_display }}
+                    </span>
+                </div>
+
+                <div class="text-sm text-gray-500 mb-4">
+                    <p>👤 {{ service.number_of_pandits }} Pandit(s)</p>
+                    <p>📅 {{ service.duration_days }} Day(s)</p>
+                </div>
+
+                <div class="flex gap-2">
+                    <a href="{% url 'services:service_detail' service.pk %}"
+                       class="flex-1 bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition text-center">
+                        View Details
+                    </a>
+                    <a href="{% url 'services:booking' service.pk %}"
+                       class="flex-1 orange-gradient text-white px-4 py-2 rounded-lg hover:opacity-90 transition text-center font-bold">
+                        Book Now
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="col-span-3 text-center text-gray-600 py-8">No featured services available at the moment.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Why Choose Us -->
+<section class="bg-gray-100 rounded-lg p-12 mb-16">
+    <h2 class="text-4xl font-bold text-gray-800 mb-8 text-center">Why Choose Us?</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="flex gap-4">
+            <div class="text-4xl">✅</div>
+            <div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Certified Pandits</h3>
+                <p class="text-gray-600">Our pandits are highly trained and certified in Vedic rituals.</p>
+            </div>
+        </div>
+        <div class="flex gap-4">
+            <div class="text-4xl">📍</div>
+            <div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Prime Location</h3>
+                <p class="text-gray-600">Rituals performed on the holy banks of the Ganges River.</p>
+            </div>
+        </div>
+        <div class="flex gap-4">
+            <div class="text-4xl">⚡</div>
+            <div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Quick Booking</h3>
+                <p class="text-gray-600">Easy online booking with secure payment processing.</p>
+            </div>
+        </div>
+        <div class="flex gap-4">
+            <div class="text-4xl">🔒</div>
+            <div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Authentic Rituals</h3>
+                <p class="text-gray-600">Follow traditional Vedic methods for all pujas.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="orange-gradient text-white rounded-lg py-12 text-center">
+    <h2 class="text-4xl font-bold mb-4">Ready to Book Your Puja?</h2>
+    <p class="text-xl mb-8 opacity-90">Explore our complete list of services and find the perfect ritual for your needs</p>
+    <a href="{% url 'services:service_list' %}" class="bg-white text-orange-600 px-8 py-3 rounded-lg font-bold hover:bg-gray-100 transition inline-block">
+        View All Services
+    </a>
+</section>
+{% endblock %}

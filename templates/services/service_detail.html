@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ service.name }} - Haridwar Puja{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <a href="{% url 'services:service_list' %}" class="text-orange-600 hover:text-orange-700 font-semibold">
+        ← Back to Services
+    </a>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <!-- Main Content -->
+    <div class="md:col-span-2">
+        <!-- Service Image -->
+        {% if service.image %}
+        <img src="{{ service.image.url }}" alt="{{ service.name }}" class="w-full h-96 object-cover rounded-lg mb-8 shadow-lg">
+        {% else %}
+        <div class="w-full h-96 bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center rounded-lg mb-8 shadow-lg">
+            <span class="text-9xl">🕉️</span>
+        </div>
+        {% endif %}
+
+        <!-- Service Details -->
+        <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+            <div class="mb-6">
+                <span class="bg-orange-100 text-orange-800 px-4 py-2 rounded-full font-semibold">
+                    {{ service.get_category_display }}
+                </span>
+            </div>
+
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">{{ service.name }}</h1>
+            <p class="text-xl text-gray-600 mb-8">{{ service.description }}</p>
+
+            <!-- Key Information -->
+            <div class="grid grid-cols-3 gap-4 mb-8 p-6 bg-gray-50 rounded-lg">
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-orange-600">₹{{ service.price }}</div>
+                    <p class="text-gray-600 text-sm">Price</p>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-orange-600">{{ service.number_of_pandits }}</div>
+                    <p class="text-gray-600 text-sm">Pandit(s)</p>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-orange-600">{{ service.duration_days }}</div>
+                    <p class="text-gray-600 text-sm">Day(s)</p>
+                </div>
+            </div>
+
+            <!-- Detailed Description -->
+            {% if service.detailed_description %}
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">About This Service</h2>
+                <p class="text-gray-700 leading-relaxed whitespace-pre-wrap">{{ service.detailed_description }}</p>
+            </div>
+            {% endif %}
+
+            <!-- Benefits -->
+            {% if service.benefits %}
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Key Benefits</h2>
+                <div class="bg-blue-50 p-6 rounded-lg">
+                    <p class="text-gray-700 whitespace-pre-wrap">{{ service.benefits }}</p>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- What's Included -->
+            {% if service.includes %}
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">What's Included</h2>
+                <div class="bg-green-50 p-6 rounded-lg">
+                    <p class="text-gray-700 whitespace-pre-wrap">{{ service.includes }}</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Sidebar - Booking Card -->
+    <div class="md:col-span-1">
+        <div class="bg-white rounded-lg shadow-lg p-8 sticky top-24">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6">Book This Service</h3>
+
+            <!-- Price Summary -->
+            <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-gray-600">Price per booking</span>
+                    <span class="text-2xl font-bold text-orange-600">₹{{ service.price }}</span>
+                </div>
+                <div class="flex justify-between items-center text-sm text-gray-600 mb-4">
+                    <span>👤 Pandits Required</span>
+                    <span class="font-semibold">{{ service.number_of_pandits }}</span>
+                </div>
+                <div class="flex justify-between items-center text-sm text-gray-600 border-t pt-4">
+                    <span>📅 Duration</span>
+                    <span class="font-semibold">{{ service.duration_days }} day(s)</span>
+                </div>
+            </div>
+
+            <!-- Booking Info -->
+            <div class="mb-6 p-4 bg-blue-50 rounded-lg text-sm text-blue-800">
+                <p>✅ Secure Payment with Razorpay</p>
+                <p class="mt-2">📍 Performed at Kankhal, Haridwar</p>
+                <p class="mt-2">🎒 All materials provided</p>
+            </div>
+
+            <!-- Book Button -->
+            <a href="{% url 'services:booking' service.pk %}"
+               class="w-full orange-gradient text-white py-3 rounded-lg font-bold hover:opacity-90 transition mb-4 block text-center">
+                Proceed to Booking
+            </a>
+
+            <!-- Contact Info -->
+            {% if site_config %}
+            <div class="border-t pt-6">
+                <h4 class="font-bold text-gray-800 mb-4">Need More Information?</h4>
+                <div class="space-y-3">
+                    {% if site_config.phone_number %}
+                    <a href="tel:{{ site_config.phone_number }}"
+                       class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
+                        <span>📞</span>
+                        <span class="text-sm text-gray-700">{{ site_config.phone_number }}</span>
+                    </a>
+                    {% endif %}
+                    {% if site_config.whatsapp_number %}
+                    <a href="https://wa.me/{{ site_config.whatsapp_number|cut:'-'|cut:' ' }}" target="_blank"
+                       class="flex items-center gap-3 p-3 bg-green-50 rounded-lg hover:bg-green-100 transition">
+                        <span>💬</span>
+                        <span class="text-sm text-gray-700">WhatsApp Us</span>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Related Services -->
+<section class="mt-16">
+    <h2 class="text-3xl font-bold text-gray-800 mb-8">Other {{ service.get_category_display }}</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {% for related_service in service|related_service %}
+        {% if related_service.id != service.id %}
+        <div class="bg-white rounded-lg shadow hover:shadow-lg transition">
+            {% if related_service.image %}
+            <img src="{{ related_service.image.url }}" alt="{{ related_service.name }}" class="w-full h-40 object-cover rounded-t-lg">
+            {% else %}
+            <div class="w-full h-40 bg-gradient-to-br from-orange-300 to-red-500 flex items-center justify-center">
+                <span class="text-5xl">🕉️</span>
+            </div>
+            {% endif %}
+            <div class="p-4">
+                <h3 class="font-bold text-gray-800 mb-2">{{ related_service.name }}</h3>
+                <p class="text-orange-600 font-bold mb-3">₹{{ related_service.price }}</p>
+                <a href="{% url 'services:service_detail' related_service.pk %}"
+                   class="text-orange-600 hover:text-orange-700 font-semibold text-sm">
+                    View Details →
+                </a>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
