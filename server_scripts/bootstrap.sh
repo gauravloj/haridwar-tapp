@@ -30,16 +30,16 @@ validate_env(){
 }
 
 update_all(){
-  sudo apt update && apt upgrade
+  sudo apt update -y && sudo apt upgrade -y
 }
 
 install_package(){
-  sudo apt install $1
+  sudo apt install -y $1
 }
 
 update_sshd(){
-  sed -i '' "s/$1/$2/' /etc/sshd_config"
-  sed -i '' "s/# $1/$2/' /etc/sshd_config"
+  sudo sed -i '' "s/$1/$2/' /etc/sshd_config"
+  sudo sed -i '' "s/# $1/$2/' /etc/sshd_config"
 }
 
 
@@ -74,7 +74,7 @@ setup_user(){
 
   sudo useradd -m $NEWUSER
   sudo usermod -aG sudo $NEWUSER
-  echo $PASSWD | passwd --stdin $NEWUSER
+  echo $PASSWD | sudo passwd --stdin $NEWUSER
 }
 
 validate_env
