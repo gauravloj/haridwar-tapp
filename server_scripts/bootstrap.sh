@@ -34,7 +34,13 @@ update_all(){
 }
 
 install_package(){
-  sudo apt install -y $1
+  local package=$1
+  if ! command -v $package /dev/null; then
+      echo "Installing $package ..."
+      sudo apt install -y $package
+  else
+      echo "$package is already installed."
+  fi
 }
 
 update_sshd(){
@@ -53,11 +59,22 @@ disable_root(){
 
 
 install_all_pkg(){
-  install_package ufw
-  install_package tmux
-  install_package fail2ban
-  install_package net-tools
-  install_package git
+  #  List of packages to install
+  packages=(
+    "ufw"
+    "tmux"
+    "fail2ban"
+    "net-tools"
+    "git"
+    "nginx"
+    "certbot"
+    "python3-certbot-nginx"
+  )
+
+  # Loop through the list of packages and install each one
+  for package in "${packages[@]}"; do
+    install_package "$package"
+  done
 }
 
 setup_fail2ban(){
@@ -81,3 +98,4 @@ validate_env
 update_all
 install_all_pkg
 setup_fail2ban
+
