@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "haridwar-puja"
+name = "haridwarpuja"
 dynamic = ["version"]
 description = ''
 readme = "README.md"
@@ -30,15 +30,15 @@ dependencies = [
     "django-tailwind>=3.6.0",
     "django-cors-headers>=4.3.0",
     "gunicorn",
-    # "pillow>=10.0.0",
+    "pillow>=10.0.0",
     "python-dotenv>=1.0.0",
     # "razorpay>=1.3.0",
   ]
 
 [project.urls]
-Documentation = "https://github.com/U.N. Owen/haridwar#readme"
-Issues = "https://github.com/U.N. Owen/haridwar/issues"
-Source = "https://github.com/U.N. Owen/haridwar"
+Documentation = "https://github.com/gauravloj/haridwar-tapp/blob/main/README.md"
+Issues = "https://github.com/gauravloj/haridwar-tapp/issues"
+Source = "https://github.com/gauravloj/haridwar-tapp"
 
 [tool.hatch.version]
 path = "haridwarpuja/__about__.py"
@@ -49,14 +49,13 @@ extra-dependencies = [
 ]
 [tool.hatch.envs.types.scripts]
 check = "mypy --install-types --non-interactive {args:src/haridwarpuja tests}"
-server = "python manage.py runserver"
 
 [tool.coverage.run]
 source_pkgs = ["haridwarpuja", "tests"]
 branch = true
 parallel = true
 omit = [
-  "src/haridwarpuja/__about__.py",
+  "haridwarpuja/__about__.py",
 ]
 
 [tool.coverage.paths]
