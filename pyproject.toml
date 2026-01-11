@@ -41,7 +41,7 @@ Issues = "https://github.com/U.N. Owen/haridwar/issues"
 Source = "https://github.com/U.N. Owen/haridwar"
 
 [tool.hatch.version]
-path = "src/haridwarpuja/__about__.py"
+path = "haridwarpuja/__about__.py"
 
 [tool.hatch.envs.types]
 extra-dependencies = [
