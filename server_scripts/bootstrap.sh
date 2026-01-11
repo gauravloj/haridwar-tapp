@@ -57,6 +57,7 @@ install_all_pkg(){
   install_package tmux
   install_package fail2ban
   install_package net-tools
+  install_package git
 }
 
 setup_fail2ban(){
@@ -65,6 +66,12 @@ setup_fail2ban(){
 }
 
 setup_user(){
+  if id $NEWUSER &> /dev/null ;
+  then
+    echo "User $NEWUSER already exists" 
+    return
+  fi
+
   sudo useradd -m $NEWUSER
   sudo usermod -aG sudo $NEWUSER
   echo $PASSWD | passwd --stdin $NEWUSER
