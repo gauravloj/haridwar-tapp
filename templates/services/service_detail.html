@@ -139,6 +139,7 @@
 </div>
 
 <!-- Related Services -->
+{% comment %}
 <section class="mt-16">
     <h2 class="text-3xl font-bold text-gray-800 mb-8">Other {{ service.get_category_display }}</h2>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -165,4 +166,5 @@
         {% endfor %}
     </div>
 </section>
+{% endcomment %}
 {% endblock %}

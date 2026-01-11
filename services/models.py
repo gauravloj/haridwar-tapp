@@ -3,6 +3,29 @@ from django.core.validators import MinValueValidator
 from django.utils import timezone
 
 
+
+"""
+Models:
+
+1. Services
+2. Webcontent
+
+
+Contents:
+1. Puje list:
+    - Title
+    - Price
+    - Number of pandit
+    - number of days
+    - description
+    - puja purpose
+2. Host details:
+    - address, lat, lon
+    - contact number
+    - whatsapp_number
+"""
+
+
 class Pandit(models.Model):
     """Model for Pandits/Priests"""
     name = models.CharField(max_length=200)

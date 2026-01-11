@@ -28,9 +28,9 @@ classifiers = [
 dependencies = [
     "django>=4.2",
     "django-tailwind>=3.6.0",
-    "razorpay>=1.3.0",
+    # "razorpay>=1.3.0",
     "python-dotenv>=1.0.0",
-    "pillow>=10.0.0",
+    # "pillow>=10.0.0",
     "django-cors-headers>=4.3.0",
   ]
 
@@ -40,25 +40,26 @@ Issues = "https://github.com/U.N. Owen/haridwar/issues"
 Source = "https://github.com/U.N. Owen/haridwar"
 
 [tool.hatch.version]
-path = "src/haridwar_puja/__about__.py"
+path = "src/haridwarpuja/__about__.py"
 
 [tool.hatch.envs.types]
 extra-dependencies = [
   "mypy>=1.0.0",
 ]
 [tool.hatch.envs.types.scripts]
-check = "mypy --install-types --non-interactive {args:src/haridwar_puja tests}"
+check = "mypy --install-types --non-interactive {args:src/haridwarpuja tests}"
+server = "python manage.py runserver"
 
 [tool.coverage.run]
-source_pkgs = ["haridwar_puja", "tests"]
+source_pkgs = ["haridwarpuja", "tests"]
 branch = true
 parallel = true
 omit = [
-  "src/haridwar_puja/__about__.py",
+  "src/haridwarpuja/__about__.py",
 ]
 
 [tool.coverage.paths]
-haridwar_puja = ["haridwarpuja"]
+haridwarpuja = ["haridwarpuja"]
 tests = ["tests"]
 
 [tool.coverage.report]
