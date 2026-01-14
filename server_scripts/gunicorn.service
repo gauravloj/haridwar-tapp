@@ -1,0 +1,26 @@
+[Unit]
+Description=Gunicorn server daemon for Haridwar website
+Requires=gunicorn.socket
+After=network.target
+
+[Service]
+# gunicorn can let systemd know when it is ready
+Type=notify
+NotifyAccess=main
+# the specific user that our service will run as
+User=haridwar
+Group=www-data
+# this user can be transiently created by systemd
+# DynamicUser=true
+RuntimeDirectory=gunicorn
+WorkingDirectory=/home/haridwar/website/haridwar-tapp
+ExecStart=/usr/bin/gunicorn --bind unix:/run/gunicorn.sock haridwarpuja.wsgi
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+TimeoutStopSec=5
+PrivateTmp=true
+# if your app does not need administrative capabilities, let systemd know
+ProtectSystem=strict
+
+[Install]
+WantedBy=multi-user.target

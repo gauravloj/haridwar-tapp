@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
-echo "Reading '.env' file for required environment variables"
-if [ -f "./.env" ]; then
-  source ./.env
-else
-  echo "Env variable not provided in '.env' file, set it up before running this script" >&2
-fi
+def import_env_file(){
+  echo "Reading '.env' file for required environment variables"
+  if [ -f "./.env" ]; then
+    source ./.env
+  else
+    echo "Env variable not provided in '.env' file, set it up before running this script" >&2
+  fi
+}
 
 log_error(){
   echo "$1" >&2
@@ -69,6 +71,8 @@ install_all_pkg(){
     "nginx"
     "certbot"
     "python3-certbot-nginx"
+    # Note: this might only be available on Debian
+    # "gunicorn"
   )
 
   # Loop through the list of packages and install each one
@@ -94,6 +98,7 @@ setup_user(){
   echo $PASSWD | sudo passwd --stdin $NEWUSER
 }
 
+import_env_file
 validate_env
 update_all
 install_all_pkg
