@@ -8,3 +8,6 @@ setup_hatch(){
   rm "$outfilename"
 }
 
+setup_ssl(){
+  sudo certbot --nginx --agree-tos --redirect --hsts --staple-ocsp --email antics-fade-raven@duck.com -d haridwar.geerivana.in
+}
